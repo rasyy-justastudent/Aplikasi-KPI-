@@ -276,11 +276,14 @@
                         </p>
                     </div>
                     <div class="d-flex flex-wrap gap-2">
+                        <a href="<?= base_url('/guru') ?>" class="btn-hero-action">
+                            <i class="bi bi-people-fill"></i> Kelola Data Pendidik & User
+                        </a>
+                        <a href="<?= base_url('/guru/create') ?>" class="btn-hero-action" style="background: #ffffff; color: var(--noor-emerald-dark);">
+                            <i class="bi bi-person-plus-fill"></i> Tambah Pendidik Baru
+                        </a>
                         <a href="<?= base_url('/penilaian') ?>" class="btn-hero-action">
                             <i class="bi bi-clipboard-check"></i> Kelola Evaluasi KPI
-                        </a>
-                        <a href="<?= base_url('/laporan/rekap-sekolah') ?>" class="btn-noor-primary" style="background: #ffffff; color: var(--noor-emerald-dark);">
-                            <i class="bi bi-file-earmark-spreadsheet"></i> Rekapitulasi Sekolah
                         </a>
                     </div>
                 </div>
@@ -291,14 +294,16 @@
     <!-- Managerial Metric Cards -->
     <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="metric-noor-card">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <span class="metric-label-title">Total Pendidik</span>
-                    <div class="icon-box p-2 bg-light rounded-3 text-success"><i class="bi bi-people-fill fs-4"></i></div>
+            <a href="<?= base_url('/guru') ?>" class="text-decoration-none">
+                <div class="metric-noor-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="metric-label-title">Total Pendidik</span>
+                        <div class="icon-box p-2 bg-light rounded-3 text-success"><i class="bi bi-people-fill fs-4"></i></div>
+                    </div>
+                    <div class="metric-big-number"><?= $totalGuru ?></div>
+                    <div class="metric-big-sub mt-2 text-success fw-bold">Klik untuk Kelola CRUD Pendidik &rarr;</div>
                 </div>
-                <div class="metric-big-number"><?= $totalGuru ?></div>
-                <div class="metric-big-sub mt-2">Tenaga Pendidik MI Al-Husna</div>
-            </div>
+            </a>
         </div>
 
         <div class="col-md-3">
@@ -331,6 +336,28 @@
                 </div>
                 <div class="metric-big-number text-info"><?= $levelCounts['ECT'] + $levelCounts['DEV'] ?></div>
                 <div class="metric-big-sub mt-2">Memerlukan Pendampingan</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick CRUD Action Panel for Admin -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="card-noor border-start border-4 border-success">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-1"><i class="bi bi-person-gear text-success me-2"></i>Manajemen Data Pendidik & User (CRUD)</h5>
+                        <p class="text-muted mb-0" style="font-size: 0.85rem;">Fitur kelola roster 48 pendidik: Tambah akun baru, Edit profil/jabatan, Reset password, & Hapus data.</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="<?= base_url('/guru') ?>" class="btn btn-outline-success rounded-pill px-4 fw-semibold">
+                            <i class="bi bi-card-list me-1"></i> Lihat & Edit Data Pendidik
+                        </a>
+                        <a href="<?= base_url('/guru/create') ?>" class="btn btn-success rounded-pill px-4 fw-bold">
+                            <i class="bi bi-person-plus-fill me-1"></i> + Tambah Pendidik Baru
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
