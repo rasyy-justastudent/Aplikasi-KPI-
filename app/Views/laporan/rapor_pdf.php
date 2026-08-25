@@ -125,11 +125,9 @@
             justify-content: center;
             font-weight: 700;
             font-size: 0.75rem;
-        }
-
-        .mini-progress-bar {
-            width: 70px;
-            height: 6px;
+        }        .mini-progress-bar {
+            width: 100px;
+            height: 8px;
             background: #e2e8f0;
             border-radius: 10px;
             overflow: hidden;
@@ -137,8 +135,9 @@
 
         .mini-progress-fill {
             height: 100%;
-            background: #543310;
+            background: linear-gradient(90deg, #10b981 0%, #0d5c46 100%);
             border-radius: 10px;
+            transition: width 0.4s ease;
         }
 
         @media print {
@@ -246,8 +245,8 @@
                             $dashOffset = 251.2 * (1 - ($scoreVal / 100));
                             ?>
                             <circle cx="50" cy="50" r="40" stroke="#5eead4" stroke-width="8" fill="none"
-                                    stroke-dasharray="251.2" stroke-dashoffset="<?= $dashOffset ?>"
-                                    stroke-linecap="round" transform="rotate(-90 50 50)" />
+                                     stroke-dasharray="251.2" stroke-dashoffset="<?= $dashOffset ?>"
+                                     stroke-linecap="round" transform="rotate(-90 50 50)" />
                         </svg>
                         <div class="gauge-center-text">
                             <div class="display-6 fw-extrabold text-white lh-1"><?= number_format($scoreVal, 1) ?></div>
@@ -261,7 +260,13 @@
                             <?php if (in_array($guru['role'] ?? '', ['admin', 'admin_tu']) || ($guru['posisi'] ?? '') === 'Admin TU'): ?>
                                 Admin TU (Staf Tenaga Kependidikan)
                             <?php else: ?>
-                                Tingkat <?= $levelInfo['level_num'] ?? 2 ?>: <?= esc($levelInfo['level_name'] ?? 'Guru Berkembang') ?>
+                                <?php 
+                                $lvlDisplay = esc($levelInfo['level_name'] ?? 'Guru Berkembang');
+                                if (strpos($lvlDisplay, 'Tingkat') === false && !empty($levelInfo['level_num'])) {
+                                    $lvlDisplay = 'Tingkat ' . $levelInfo['level_num'] . ': ' . $lvlDisplay;
+                                }
+                                ?>
+                                <?= $lvlDisplay ?>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -279,9 +284,9 @@
             <table class="table table-borderless align-middle custom-report-table mb-0">
                 <thead>
                     <tr class="text-uppercase text-muted border-bottom" style="font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;">
-                        <th style="width: 50%;">PILAR EVALUASI</th>
+                        <th style="width: 45%;">PILAR EVALUASI</th>
                         <th class="text-center" style="width: 15%;">BOBOT (%)</th>
-                        <th class="text-center" style="width: 20%;">SKOR CAPAIAN</th>
+                        <th class="text-center" style="width: 25%;">SKOR CAPAIAN</th>
                         <th class="text-end" style="width: 15%;">NILAI TERBOBOT</th>
                     </tr>
                 </thead>
@@ -299,21 +304,21 @@
                     ?>
                         <tr>
                             <td>
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2.5">
                                     <span class="pilar-num-badge"><?= $p['num'] ?></span>
                                     <span class="fw-semibold text-dark" style="font-size: 0.88rem;"><?= $p['name'] ?></span>
                                 </div>
                             </td>
                             <td class="text-center fw-semibold text-muted" style="font-size: 0.85rem;"><?= $p['bobot'] ?>%</td>
-                            <td class="text-center">
+                            <td>
                                 <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <div class="mini-progress-bar">
+                                    <div class="mini-progress-bar flex-grow-1" style="max-width: 100px;">
                                         <div class="mini-progress-fill" style="width: <?= min(100, max(0, $p['skor'])) ?>%;"></div>
                                     </div>
-                                    <span class="fw-semibold text-dark" style="font-size: 0.82rem;"><?= number_format($p['skor'], 2) ?>%</span>
+                                    <span class="fw-bold text-success font-monospace" style="font-size: 0.85rem; min-width: 55px; text-align: right;"><?= number_format($p['skor'], 2) ?>%</span>
                                 </div>
                             </td>
-                            <td class="text-end fw-bold text-dark" style="font-size: 0.9rem;"><?= $terbobot ?></td>
+                            <td class="text-end fw-extrabold text-dark font-monospace" style="font-size: 0.92rem;"><?= $terbobot ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
