@@ -39,9 +39,9 @@
                 <i class="bi bi-grid-1x2-fill"></i> Dashboard
             </a>
 
-            <?php if (in_array(session()->get('role'), ['admin', 'admin_tu', 'kepsek'])): ?>
+            <?php if (in_array(session()->get('role'), ['admin', 'admin_tu', 'kepsek', 'waka', 'koordinator']) || session()->get('role') !== 'guru'): ?>
                 <a href="<?= base_url('/guru') ?>" class="nav-link <?= strpos(uri_string(), 'guru') === 0 ? 'active' : '' ?>">
-                    <i class="bi bi-people-fill"></i> Data Pendidik
+                    <i class="bi bi-people-fill"></i> Kelola Data Pendidik & User
                 </a>
                 <a href="<?= base_url('/periode') ?>" class="nav-link <?= strpos(uri_string(), 'periode') === 0 ? 'active' : '' ?>">
                     <i class="bi bi-calendar3"></i> Periode KPI
