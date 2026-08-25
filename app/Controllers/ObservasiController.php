@@ -45,9 +45,15 @@ class ObservasiController extends BaseController
         $activePeriode = $this->periodeModel->getActivePeriode() ?? $this->periodeModel->orderBy('id', 'DESC')->first();
         $periodeId     = $activePeriode ? $activePeriode['id'] : 0;
 
-        $gurus            = $this->guruModel->getGuruWithUser();
-        $allAssignments   = [];
-        $myObserverTasks  = [];
+        $gurus = $this->guruModel->getGuruWithUser();
+
+        // Filter targetGurus: only teachers with role 'guru' or position != 'Admin TU'
+        $targetGurus = array_values(array_filter($gurus, function ($g) {
+            return ($g['role'] ?? '') === 'guru' || (!in_array($g['role'] ?? '', ['admin', 'admin_tu']) && ($g['posisi'] ?? '') !== 'Admin TU');
+        }));
+
+        $allAssignments  = [];
+        $myObserverTasks = [];
 
         if ($periodeId > 0) {
             if (in_array($role, ['admin', 'admin_tu', 'kepsek', 'waka'])) {
@@ -63,6 +69,7 @@ class ObservasiController extends BaseController
             'title'           => 'Observasi Kelas & Penugasan Observer',
             'activePeriode'   => $activePeriode,
             'gurus'           => $gurus,
+            'targetGurus'     => $targetGurus,
             'allAssignments'  => $allAssignments,
             'myObserverTasks' => $myObserverTasks,
             'role'            => $role,
@@ -80,11 +87,17 @@ class ObservasiController extends BaseController
 
         $observerGuruId = $this->request->getPost('observer_guru_id');
         $targetGuruId   = $this->request->getPost('target_guru_id');
-        $periodeId       = $this->request->getPost('periode_id');
+        $periodeId      = $this->request->getPost('periode_id');
         $catatan        = $this->request->getPost('catatan_kepsek');
 
         if ($observerGuruId == $targetGuruId) {
             return redirect()->to('/observasi')->with('error', 'Guru Observer tidak boleh sama dengan Guru Target Observasi.');
+        }
+
+        // Validate that target guru is a pendidik (role === 'guru' or not Admin TU)
+        $targetGuru = $this->guruModel->getGuruWithUser($targetGuruId);
+        if (!$targetGuru || in_array($targetGuru['role'] ?? '', ['admin', 'admin_tu']) || ($targetGuru['posisi'] ?? '') === 'Admin TU') {
+            return redirect()->to('/observasi')->with('error', 'Guru target yang di-observasi harus ber-role Pendidik / Guru (bukan Admin TU).');
         }
 
         $existing = $this->assignmentModel->where('periode_id', $periodeId)

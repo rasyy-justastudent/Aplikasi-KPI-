@@ -194,13 +194,14 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold">Pilih Guru Target (Di-Observasi) *</label>
                             <select name="target_guru_id" class="form-select" required>
-                                <option value="">-- Pilih Guru Target --</option>
-                                <?php foreach ($gurus as $g): ?>
+                                <option value="">-- Pilih Guru Target (Pendidik) --</option>
+                                <?php foreach ($targetGurus as $g): ?>
                                     <option value="<?= $g['id'] ?>">
                                         <?= esc($g['nama_guru']) ?> (<?= esc($g['posisi'] ?: 'Pendidik') ?>)
                                     </option>
                                 <?php endforeach; ?>
                             </select>
+                            <small class="text-muted">Khusus pendidik / guru yang diobservasi dalam KBM.</small>
                         </div>
 
                         <div class="mb-3">
