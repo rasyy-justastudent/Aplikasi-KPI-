@@ -27,9 +27,9 @@ class Database extends Config
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => 'root',
-        'password'     => '',
-        'database'     => 'db_kpi_guru',
+        'username'     => 'u128823797_projek',
+        'password'     => '#Rahasia404#123',
+        'database'     => 'u128823797_projek',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
