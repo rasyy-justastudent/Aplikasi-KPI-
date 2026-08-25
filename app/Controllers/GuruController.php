@@ -59,22 +59,34 @@ class GuruController extends BaseController
 
     public function store()
     {
+        $nipNik = trim($this->request->getPost('nip_nik') ?? '');
+        if ($nipNik === '') {
+            $nipNik = null;
+        }
+
         $rules = [
-            'nama_guru'    => 'required|min_length[3]',
-            'username'     => 'required|is_unique[users.username]',
-            'email'        => 'required|valid_email|is_unique[users.email]',
-            'posisi'       => 'required',
-            'password'     => 'required|min_length[6]',
+            'nama_guru' => 'required|min_length[3]',
+            'username'  => 'required|is_unique[users.username]',
+            'email'     => 'required|valid_email|is_unique[users.email]',
+            'posisi'    => 'required',
+            'password'  => 'required|min_length[6]',
         ];
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $nama = $this->request->getPost('nama_guru');
+        if ($nipNik !== null) {
+            $checkNip = $this->guruModel->where('nip_nik', $nipNik)->first();
+            if ($checkNip) {
+                return redirect()->back()->withInput()->with('error', 'NIP / NIK "' . $nipNik . '" sudah terdaftar untuk pendidik lain (' . $checkNip['nama_guru'] . '). Silakan gunakan NIP lain.');
+            }
+        }
+
+        $nama     = $this->request->getPost('nama_guru');
         $username = $this->request->getPost('username');
-        $email = $this->request->getPost('email');
-        $role = $this->request->getPost('role') ?? 'guru';
+        $email    = $this->request->getPost('email');
+        $role     = $this->request->getPost('role') ?? 'guru';
         $password = password_hash($this->request->getPost('password'), PASSWORD_BCRYPT);
 
         // Insert User
@@ -90,7 +102,7 @@ class GuruController extends BaseController
         // Insert Guru
         $this->guruModel->insert([
             'user_id'              => $userId,
-            'nip_nik'              => $this->request->getPost('nip_nik'),
+            'nip_nik'              => $nipNik,
             'nama_guru'            => $nama,
             'posisi'               => $this->request->getPost('posisi'),
             'bidang_studi'         => $this->request->getPost('bidang_studi'),
@@ -136,6 +148,18 @@ class GuruController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $nipNik = trim($this->request->getPost('nip_nik') ?? '');
+        if ($nipNik === '') {
+            $nipNik = null;
+        }
+
+        if ($nipNik !== null) {
+            $checkNip = $this->guruModel->where('nip_nik', $nipNik)->where('id !=', $id)->first();
+            if ($checkNip) {
+                return redirect()->back()->withInput()->with('error', 'NIP / NIK "' . $nipNik . '" sudah terdaftar untuk pendidik lain (' . $checkNip['nama_guru'] . ').');
+            }
+        }
+
         $nama     = $this->request->getPost('nama_guru');
         $username = $this->request->getPost('username');
         $email    = $this->request->getPost('email');
@@ -168,7 +192,7 @@ class GuruController extends BaseController
 
         // Update Guru
         $this->guruModel->update($id, [
-            'nip_nik'              => $this->request->getPost('nip_nik'),
+            'nip_nik'              => $nipNik,
             'nama_guru'            => $nama,
             'posisi'               => $this->request->getPost('posisi'),
             'bidang_studi'         => $this->request->getPost('bidang_studi'),
