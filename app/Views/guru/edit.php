@@ -9,6 +9,13 @@
                 <a href="<?= base_url('/guru') ?>" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="bi bi-arrow-left me-1"></i> Kembali</a>
             </div>
 
+            <?php if (session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show rounded-3 mb-4" role="alert" style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i><?= session()->getFlashdata('error') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
             <form action="<?= base_url('/guru/update/' . $guru['id']) ?>" method="POST">
                 <?= csrf_field() ?>
 

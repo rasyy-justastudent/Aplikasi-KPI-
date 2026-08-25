@@ -73,7 +73,8 @@ class GuruController extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            $errMsgs = implode('<br>', $this->validator->getErrors());
+            return redirect()->back()->withInput()->with('error', $errMsgs);
         }
 
         if ($nipNik !== null) {
@@ -99,21 +100,29 @@ class GuruController extends BaseController
             'is_active'    => 1,
         ]);
 
+        if (!$userId) {
+            return redirect()->back()->withInput()->with('error', 'Gagal mendaftarkan akun user baru.');
+        }
+
         // Insert Guru
-        $this->guruModel->insert([
+        $inserted = $this->guruModel->insert([
             'user_id'              => $userId,
             'nip_nik'              => $nipNik,
             'nama_guru'            => $nama,
             'posisi'               => $this->request->getPost('posisi'),
             'bidang_studi'         => $this->request->getPost('bidang_studi'),
-            'tingkatan_level'      => $this->request->getPost('tingkatan_level') ?? 'ECT',
-            'target_ukg_persen'    => $this->request->getPost('target_ukg_persen') ?? 85.00,
-            'target_jam_pelatihan' => $this->request->getPost('target_jam_pelatihan') ?? 25,
-            'target_english_persen' => $this->request->getPost('target_english_persen') ?? 40.00,
-            'target_digital_persen' => $this->request->getPost('target_digital_persen') ?? 75.00,
+            'tingkatan_level'      => $this->request->getPost('tingkatan_level') ?: 'ECT',
+            'target_ukg_persen'    => $this->request->getPost('target_ukg_persen') ?: 85.00,
+            'target_jam_pelatihan' => $this->request->getPost('target_jam_pelatihan') ?: 25,
+            'target_english_persen' => $this->request->getPost('target_english_persen') ?: 40.00,
+            'target_digital_persen' => $this->request->getPost('target_digital_persen') ?: 75.00,
         ]);
 
-        return redirect()->to('/guru')->with('success', 'Data pendidik berhasil ditambahkan.');
+        if (!$inserted) {
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan profil data pendidik.');
+        }
+
+        return redirect()->to('/guru')->with('success', 'Data pendidik baru (' . $nama . ') berhasil ditambahkan ke database.');
     }
 
     public function edit($id)
