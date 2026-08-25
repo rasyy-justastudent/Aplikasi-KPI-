@@ -313,24 +313,33 @@ class KpiSeeder extends Seeder
 
             unset($u['is_guru'], $u['nip'], $u['posisi']);
 
-            $db->table('users')->insert($u);
-            $userId = $db->insertID();
+            // Check if user already exists
+            $existingUser = $db->table('users')->where('username', $u['username'])->get()->getRow();
+            if ($existingUser) {
+                $userId = $existingUser->id;
+            } else {
+                $db->table('users')->insert($u);
+                $userId = $db->insertID();
+            }
 
             if ($isGuru) {
-                $db->table('gurus')->insert([
-                    'user_id'               => $userId,
-                    'nip_nik'               => $nip,
-                    'nama_guru'             => $u['nama_lengkap'],
-                    'posisi'                => $posisi,
-                    'bidang_studi'          => null,
-                    'tingkatan_level'       => null,
-                    'target_ukg_persen'     => 85.00,
-                    'target_jam_pelatihan'  => 25,
-                    'target_english_persen' => 40.00,
-                    'target_digital_persen' => 75.00,
-                    'created_at'            => date('Y-m-d H:i:s'),
-                    'updated_at'            => date('Y-m-d H:i:s'),
-                ]);
+                $existingGuru = $db->table('gurus')->where('user_id', $userId)->orWhere('nip_nik', $nip)->get()->getRow();
+                if (!$existingGuru) {
+                    $db->table('gurus')->insert([
+                        'user_id'               => $userId,
+                        'nip_nik'               => $nip,
+                        'nama_guru'             => $u['nama_lengkap'],
+                        'posisi'                => $posisi,
+                        'bidang_studi'          => null,
+                        'tingkatan_level'       => null,
+                        'target_ukg_persen'     => 85.00,
+                        'target_jam_pelatihan'  => 25,
+                        'target_english_persen' => 40.00,
+                        'target_digital_persen' => 75.00,
+                        'created_at'            => date('Y-m-d H:i:s'),
+                        'updated_at'            => date('Y-m-d H:i:s'),
+                    ]);
+                }
             }
         }
     }
