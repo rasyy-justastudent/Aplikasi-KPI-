@@ -36,11 +36,8 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Role Hak Akses Sistem *</label>
                         <select name="role" class="form-select" required>
-                            <option value="admin" <?= $guru['role'] === 'admin' ? 'selected' : '' ?>>Admin System (Full Access)</option>
-                            <option value="admin_tu" <?= $guru['role'] === 'admin_tu' ? 'selected' : '' ?>>Admin TU (Tata Usaha)</option>
+                            <option value="admin" <?= in_array($guru['role'], ['admin', 'admin_tu']) ? 'selected' : '' ?>>Admin (Admin TU)</option>
                             <option value="guru" <?= $guru['role'] === 'guru' ? 'selected' : '' ?>>Guru (Pendidik)</option>
-                            <option value="koordinator" <?= $guru['role'] === 'koordinator' ? 'selected' : '' ?>>Koordinator Bidang</option>
-                            <option value="waka" <?= $guru['role'] === 'waka' ? 'selected' : '' ?>>Wakil Kepala Sekolah</option>
                             <option value="kepsek" <?= $guru['role'] === 'kepsek' ? 'selected' : '' ?>>Kepala Sekolah</option>
                         </select>
                     </div>
