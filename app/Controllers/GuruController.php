@@ -65,11 +65,39 @@ class GuruController extends BaseController
         }
 
         $rules = [
-            'nama_guru' => 'required|min_length[3]',
-            'username'  => 'required|is_unique[users.username]',
-            'email'     => 'required|valid_email|is_unique[users.email]',
-            'posisi'    => 'required',
-            'password'  => 'required|min_length[6]',
+            'nama_guru' => [
+                'rules'  => 'required|min_length[3]',
+                'errors' => [
+                    'required'   => 'Nama lengkap guru wajib diisi.',
+                    'min_length' => 'Nama lengkap minimal 3 karakter.'
+                ]
+            ],
+            'username' => [
+                'rules'  => 'required|is_unique[users.username]',
+                'errors' => [
+                    'required'  => 'Username login wajib diisi.',
+                    'is_unique' => 'Username tersebut SUDAH DIGUNAKAN oleh akun pendidik/user lain. Silakan buat username yang unik (misal: nama_pendidik).'
+                ]
+            ],
+            'email' => [
+                'rules'  => 'required|valid_email|is_unique[users.email]',
+                'errors' => [
+                    'required'    => 'Email wajib diisi.',
+                    'valid_email' => 'Format penulisan email tidak valid.',
+                    'is_unique'   => 'Alamat email tersebut SUDAH TERDAFTAR untuk akun pendidik lain.'
+                ]
+            ],
+            'posisi' => [
+                'rules'  => 'required',
+                'errors' => ['required' => 'Posisi / Jabatan wajib dipilih.']
+            ],
+            'password' => [
+                'rules'  => 'required|min_length[6]',
+                'errors' => [
+                    'required'   => 'Password login wajib diisi.',
+                    'min_length' => 'Password minimal harus 6 karakter.'
+                ]
+            ],
         ];
 
         if (!$this->validate($rules)) {
