@@ -53,6 +53,10 @@
 
             <div class="nav-section-title">Evaluasi & Presensi</div>
 
+            <a href="<?= base_url('/observasi') ?>" class="nav-link <?= strpos(uri_string(), 'observasi') === 0 ? 'active' : '' ?>">
+                <i class="bi bi-eye-fill"></i> Observasi Kelas KBM
+            </a>
+
             <a href="<?= base_url('/penilaian') ?>" class="nav-link <?= strpos(uri_string(), 'penilaian') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-person-workspace"></i> Penilaian Mandiri / 360°
             </a>

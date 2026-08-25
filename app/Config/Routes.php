@@ -30,6 +30,13 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     // Indikator Evaluation
     $routes->get('/indikator', 'IndikatorController::index');
 
+    // Penugasan Observer & Observasi Kelas KBM (20 Indikator A-G)
+    $routes->get('/observasi', 'ObservasiController::index');
+    $routes->post('/observasi/assign', 'ObservasiController::assign');
+    $routes->get('/observasi/delete/(:num)', 'ObservasiController::deleteAssignment/$1');
+    $routes->get('/observasi/input/(:num)', 'ObservasiController::input/$1');
+    $routes->post('/observasi/save', 'ObservasiController::save');
+
     // Penilaian 360 & Approval
     $routes->get('/penilaian', 'PenilaianController::index');
     $routes->get('/penilaian/input/(:num)', 'PenilaianController::input/$1');
