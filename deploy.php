@@ -105,13 +105,32 @@ try {
             @rmdir($extractDir);
         }
 
+        // 3. Auto Run Migrations for Database Updates
+        $logs[] = "🗄️ Memeriksa & meng-update struktur tabel database...";
+        try {
+            if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+                require_once __DIR__ . '/vendor/autoload.php';
+                $app = \Config\Services::codeigniter(null, false);
+                $app->initialize();
+                $migrations = \Config\Services::migrations();
+                $migrated = $migrations->latest();
+                if ($migrated) {
+                    $logs[] = "✨ Migrasi Database Sukses: Tabel baru / kolom baru otomatis ter-update!";
+                } else {
+                    $logs[] = "ℹ️ Database sudah versi terbaru (tidak ada perubahan tabel).";
+                }
+            }
+        } catch (\Throwable $migError) {
+            $logs[] = "⚠️ Info Migrasi DB: " . $migError->getMessage();
+        }
+
         $elapsed = round(microtime(true) - $startTime, 2);
         $logs[] = "✅ Sukses memperbarui $copiedCount file.";
         $logs[] = "⏱️ Selesai dalam {$elapsed} detik.";
 
         echo '<div class="status-icon">🎉</div>';
-        echo '<h2>Deploy Berhasil!</h2>';
-        echo '<p>Seluruh file terbaru dari GitHub telah disinkronkan ke hosting secara instan.</p>';
+        echo '<h2>Deploy & Auto-Migrate Berhasil!</h2>';
+        echo '<p>Seluruh file kodingan & struktur tabel database di hosting telah diperbarui secara instan.</p>';
         echo '<div class="log-box">' . implode('<br>', $logs) . '</div>';
         echo '<a href="public/" class="btn">Buka Aplikasi KPI &rarr;</a>';
     } else {
