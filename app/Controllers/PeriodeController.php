@@ -64,4 +64,10 @@ class PeriodeController extends BaseController
 
         return redirect()->to('/periode')->with('success', 'Status periode berhasil diperbarui.');
     }
+
+    public function delete($id)
+    {
+        $this->periodeModel->delete($id);
+        return redirect()->to('/periode')->with('success', 'Periode berhasil dihapus.');
+    }
 }

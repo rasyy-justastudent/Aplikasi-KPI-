@@ -13,29 +13,36 @@
     </div>
 </div>
 
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i><?= session()->getFlashdata('success') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<?php endif; ?>
+
 <div class="card card-custom p-4">
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-light">
                 <tr>
-                    <th>No</th>
+                    <th class="text-center" style="width: 50px;">No</th>
                     <th>Tahun Pelajaran</th>
-                    <th>Semester</th>
+                    <th class="text-center">Semester</th>
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Selesai</th>
-                    <th>Status Periode</th>
-                    <th class="text-center">Aksi Toggle Status</th>
+                    <th class="text-center">Status Periode</th>
+                    <th class="text-center">Aksi Toggle Status & Kelola</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($periodes as $idx => $p): ?>
                     <tr>
-                        <td><?= $idx + 1 ?></td>
+                        <td class="text-center text-muted fw-semibold"><?= $idx + 1 ?></td>
                         <td class="fw-bold text-dark"><?= esc($p['tahun_pelajaran']) ?></td>
-                        <td><span class="badge bg-light text-dark border"><?= esc($p['semester']) ?></span></td>
+                        <td class="text-center"><span class="badge bg-light text-dark border"><?= esc($p['semester']) ?></span></td>
                         <td><i class="bi bi-calendar-event text-muted me-1"></i><?= date('d M Y', strtotime($p['tgl_mulai'])) ?></td>
                         <td><i class="bi bi-calendar-event text-muted me-1"></i><?= date('d M Y', strtotime($p['tgl_selesai'])) ?></td>
-                        <td>
+                        <td class="text-center">
                             <?php if ($p['status'] === 'open'): ?>
                                 <span class="badge bg-success px-3 py-2"><i class="bi bi-play-circle-fill me-1"></i> Active / Open</span>
                             <?php elseif ($p['status'] === 'review'): ?>
@@ -47,10 +54,15 @@
                             <?php endif; ?>
                         </td>
                         <td class="text-center">
-                            <div class="btn-group btn-group-sm">
-                                <a href="<?= base_url('/periode/status/' . $p['id'] . '/open') ?>" class="btn btn-outline-success <?= $p['status'] === 'open' ? 'active' : '' ?>">Open</a>
-                                <a href="<?= base_url('/periode/status/' . $p['id'] . '/review') ?>" class="btn btn-outline-warning <?= $p['status'] === 'review' ? 'active' : '' ?>">Review</a>
-                                <a href="<?= base_url('/periode/status/' . $p['id'] . '/closed') ?>" class="btn btn-outline-secondary <?= $p['status'] === 'closed' ? 'active' : '' ?>">Close</a>
+                            <div class="d-inline-flex gap-1">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="<?= base_url('/periode/status/' . $p['id'] . '/open') ?>" class="btn btn-outline-success <?= $p['status'] === 'open' ? 'active' : '' ?>">Open</a>
+                                    <a href="<?= base_url('/periode/status/' . $p['id'] . '/review') ?>" class="btn btn-outline-warning <?= $p['status'] === 'review' ? 'active' : '' ?>">Review</a>
+                                    <a href="<?= base_url('/periode/status/' . $p['id'] . '/closed') ?>" class="btn btn-outline-secondary <?= $p['status'] === 'closed' ? 'active' : '' ?>">Close</a>
+                                </div>
+                                <a href="<?= base_url('/periode/delete/' . $p['id']) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus periode ini?')" title="Hapus Periode">
+                                    <i class="bi bi-trash"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>

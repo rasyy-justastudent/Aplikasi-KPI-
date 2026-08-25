@@ -230,6 +230,15 @@ class KpiSeeder extends Seeder
         $db->table('indikator_kpis')->emptyTable();
         $db->table('indikator_kpis')->insertBatch($indikatorData);
 
+        // 4. Clean existing users, gurus, and periodes, then seed Test Accounts per Role
+        $db->table('bukti_portofolios')->emptyTable();
+        $db->table('presensi_gurus')->emptyTable();
+        $db->table('penilaian_details')->emptyTable();
+        $db->table('penilaian_kpis')->emptyTable();
+        $db->table('periodes')->emptyTable();
+        $db->table('gurus')->emptyTable();
+        $db->table('users')->emptyTable();
+
         // 3. Seed Periodes
         $periodeData = [
             [
@@ -251,15 +260,7 @@ class KpiSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s'),
             ]
         ];
-        $db->table('periodes')->ignore(true)->insertBatch($periodeData);
-
-        // 4. Clean existing users & gurus, then seed Test Accounts per Role
-        $db->table('bukti_portofolios')->emptyTable();
-        $db->table('presensi_gurus')->emptyTable();
-        $db->table('penilaian_details')->emptyTable();
-        $db->table('penilaian_kpis')->emptyTable();
-        $db->table('gurus')->emptyTable();
-        $db->table('users')->emptyTable();
+        $db->table('periodes')->insertBatch($periodeData);
 
         $defaultPassword = password_hash('password123', PASSWORD_BCRYPT);
 

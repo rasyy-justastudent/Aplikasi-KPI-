@@ -25,6 +25,7 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('/periode', 'PeriodeController::index');
     $routes->post('/periode/store', 'PeriodeController::store');
     $routes->get('/periode/status/(:num)/(:segment)', 'PeriodeController::updateStatus/$1/$2');
+    $routes->get('/periode/delete/(:num)', 'PeriodeController::delete/$1');
 
     // Indikator Evaluation
     $routes->get('/indikator', 'IndikatorController::index');
