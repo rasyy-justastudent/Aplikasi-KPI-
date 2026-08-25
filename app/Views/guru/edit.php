@@ -22,12 +22,12 @@
                         <input type="text" name="nip_nik" class="form-control" value="<?= esc($guru['nip_nik']) ?>">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">Username Login</label>
-                        <input type="text" class="form-control bg-light" value="<?= esc($guru['username']) ?>" readonly>
+                        <label class="form-label fw-bold">Username Login *</label>
+                        <input type="text" name="username" class="form-control" value="<?= esc($guru['username']) ?>" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">Email</label>
-                        <input type="email" class="form-control bg-light" value="<?= esc($guru['email']) ?>" readonly>
+                        <label class="form-label fw-bold">Email *</label>
+                        <input type="email" name="email" class="form-control" value="<?= esc($guru['email']) ?>" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Reset Password (Kosongkan jika tidak diubah)</label>
@@ -36,8 +36,11 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Role Hak Akses Sistem *</label>
                         <select name="role" class="form-select" required>
-                            <option value="admin" <?= in_array($guru['role'], ['admin', 'admin_tu']) ? 'selected' : '' ?>>Admin (Admin TU)</option>
+                            <option value="admin" <?= $guru['role'] === 'admin' ? 'selected' : '' ?>>Admin System (Full Access)</option>
+                            <option value="admin_tu" <?= $guru['role'] === 'admin_tu' ? 'selected' : '' ?>>Admin TU (Tata Usaha)</option>
                             <option value="guru" <?= $guru['role'] === 'guru' ? 'selected' : '' ?>>Guru (Pendidik)</option>
+                            <option value="koordinator" <?= $guru['role'] === 'koordinator' ? 'selected' : '' ?>>Koordinator Bidang</option>
+                            <option value="waka" <?= $guru['role'] === 'waka' ? 'selected' : '' ?>>Wakil Kepala Sekolah</option>
                             <option value="kepsek" <?= $guru['role'] === 'kepsek' ? 'selected' : '' ?>>Kepala Sekolah</option>
                         </select>
                     </div>

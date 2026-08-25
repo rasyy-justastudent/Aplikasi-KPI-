@@ -36,8 +36,11 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Role Hak Akses Sistem *</label>
                         <select name="role" class="form-select" required>
-                            <option value="admin">Admin (Admin TU)</option>
+                            <option value="admin">Admin System (Full Access)</option>
+                            <option value="admin_tu">Admin TU (Tata Usaha)</option>
                             <option value="guru" selected>Guru (Pendidik)</option>
+                            <option value="koordinator">Koordinator Bidang</option>
+                            <option value="waka">Wakil Kepala Sekolah</option>
                             <option value="kepsek">Kepala Sekolah</option>
                         </select>
                     </div>

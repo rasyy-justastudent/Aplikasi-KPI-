@@ -122,7 +122,7 @@ class GuruController extends BaseController
 
     public function update($id)
     {
-        $guru = $this->guruModel->find($id);
+        $guru = $this->guruModel->getGuruWithUser($id);
         if (!$guru) {
             return redirect()->to('/guru')->with('error', 'Data guru tidak ditemukan.');
         }
@@ -136,7 +136,35 @@ class GuruController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $nama = $this->request->getPost('nama_guru');
+        $nama     = $this->request->getPost('nama_guru');
+        $username = $this->request->getPost('username');
+        $email    = $this->request->getPost('email');
+        $role     = $this->request->getPost('role');
+        $password = $this->request->getPost('password');
+
+        if ($guru['user_id']) {
+            if ($username && $username !== $guru['username']) {
+                $checkUn = $this->userModel->where('username', $username)->where('id !=', $guru['user_id'])->first();
+                if ($checkUn) {
+                    return redirect()->back()->withInput()->with('error', 'Username sudah digunakan oleh akun lain.');
+                }
+            }
+
+            if ($email && $email !== $guru['email']) {
+                $checkEm = $this->userModel->where('email', $email)->where('id !=', $guru['user_id'])->first();
+                if ($checkEm) {
+                    return redirect()->back()->withInput()->with('error', 'Email sudah digunakan oleh akun lain.');
+                }
+            }
+
+            $userUpdate = ['nama_lengkap' => $nama];
+            if ($username) $userUpdate['username'] = $username;
+            if ($email) $userUpdate['email'] = $email;
+            if ($role) $userUpdate['role'] = $role;
+            if ($password) $userUpdate['password_hash'] = password_hash($password, PASSWORD_BCRYPT);
+
+            $this->userModel->update($guru['user_id'], $userUpdate);
+        }
 
         // Update Guru
         $this->guruModel->update($id, [
@@ -151,19 +179,7 @@ class GuruController extends BaseController
             'target_digital_persen' => $this->request->getPost('target_digital_persen'),
         ]);
 
-        // Update User name & role if user exists
-        if ($guru['user_id']) {
-            $userUpdate = ['nama_lengkap' => $nama];
-            if ($this->request->getPost('role')) {
-                $userUpdate['role'] = $this->request->getPost('role');
-            }
-            if ($this->request->getPost('password')) {
-                $userUpdate['password_hash'] = password_hash($this->request->getPost('password'), PASSWORD_BCRYPT);
-            }
-            $this->userModel->update($guru['user_id'], $userUpdate);
-        }
-
-        return redirect()->to('/guru')->with('success', 'Data pendidik berhasil diperbarui.');
+        return redirect()->to('/guru')->with('success', 'Data pendidik dan akun user berhasil diperbarui.');
     }
 
     public function delete($id)
