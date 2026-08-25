@@ -18,6 +18,22 @@ class App extends BaseConfig
      */
     public string $baseURL = 'http://localhost:8080/';
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
+            $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ? 'https' : 'http';
+            $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+            $dirName = str_replace('\\', '/', dirname($scriptName));
+            $path = rtrim($dirName, '/');
+            if ($path === '/' || $path === '') {
+                $path = '';
+            }
+            $this->baseURL = $protocol . '://' . $_SERVER['HTTP_HOST'] . $path . '/';
+        }
+    }
+
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
      * If you want to accept multiple Hostnames, set this.
