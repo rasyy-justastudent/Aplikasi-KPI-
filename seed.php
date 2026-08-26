@@ -22,9 +22,13 @@ echo '<!DOCTYPE html>
 
 try {
     if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-        require_once __DIR__ . '/vendor/autoload.php';
-        $app = \Config\Services::codeigniter(null, false);
-        $app->initialize();
+        defined('FCPATH') || define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR);
+        defined('COMPOSER_PATH') || define('COMPOSER_PATH', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+
+        require __DIR__ . '/app/Config/Paths.php';
+        $paths = new \Config\Paths();
+        require $paths->systemDirectory . '/Boot.php';
+        \CodeIgniter\Boot::bootTest($paths);
         
         $seeder = \Config\Database::seeder();
         $seeder->call('App\Database\Seeds\KpiSeeder');
