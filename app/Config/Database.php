@@ -201,9 +201,10 @@ class Database extends Config
             $this->defaultGroup = 'tests';
         }
 
-        // Guarantee database connection credentials on hosting even if .env overrides password to empty
-        if (empty($this->default['password']) || $this->default['password'] === '') {
-            if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') === false && strpos($_SERVER['HTTP_HOST'], '127.0.0.1') === false) {
+        // Guarantee database connection credentials on live hosting server
+        $isLiveHosting = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') === false && strpos($_SERVER['HTTP_HOST'], '127.0.0.1') === false;
+        if ($isLiveHosting || empty($this->default['password']) || $this->default['database'] === 'db_kpi_guru') {
+            if ($isLiveHosting || !empty($_SERVER['HTTP_HOST'])) {
                 $this->default['hostname'] = 'localhost';
                 $this->default['username'] = 'u128823797_projek';
                 $this->default['password'] = '#Rahasia404#123';

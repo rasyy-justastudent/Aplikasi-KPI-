@@ -75,8 +75,19 @@ try {
             $subPath  = str_replace('\\', '/', substr($item->getPathname(), strlen($sourceDir) + 1));
             $destPath = $targetDir . '/' . $subPath;
 
-            // Preserve .env file
+            // Preserve .env file or create valid .env on server
             if ($subPath === '.env') {
+                if (!file_exists($destPath)) {
+                    $envContent = "CI_ENVIRONMENT = production\n"
+                        . "database.default.hostname = localhost\n"
+                        . "database.default.database = u128823797_projek\n"
+                        . "database.default.username = u128823797_projek\n"
+                        . "database.default.password = #Rahasia404#123\n"
+                        . "database.default.DBDriver = MySQLi\n"
+                        . "database.default.DBPrefix =\n"
+                        . "database.default.port = 3306\n";
+                    file_put_contents($destPath, $envContent);
+                }
                 continue;
             }
 
