@@ -79,6 +79,7 @@ try {
             if ($subPath === '.env') {
                 if (!file_exists($destPath)) {
                     $envContent = "CI_ENVIRONMENT = production\n"
+                        . "app.baseURL = 'https://istanakomputer.com/projek/tes/Sistem-KPI-Guru/public/'\n"
                         . "database.default.hostname = localhost\n"
                         . "database.default.database = u128823797_projek\n"
                         . "database.default.username = u128823797_projek\n"
