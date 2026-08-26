@@ -28,7 +28,7 @@ try {
         require __DIR__ . '/app/Config/Paths.php';
         $paths = new \Config\Paths();
         require $paths->systemDirectory . '/Boot.php';
-        \CodeIgniter\Boot::bootTest($paths);
+        \CodeIgniter\Boot::bootConsole($paths);
         
         $seeder = \Config\Database::seeder();
         $seeder->call('App\Database\Seeds\KpiSeeder');
