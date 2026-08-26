@@ -111,6 +111,7 @@ try {
             if (file_exists(__DIR__ . '/vendor/autoload.php')) {
                 defined('FCPATH') || define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR);
                 defined('COMPOSER_PATH') || define('COMPOSER_PATH', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+                defined('ENVIRONMENT') || define('ENVIRONMENT', $_ENV['CI_ENVIRONMENT'] ?? $_SERVER['CI_ENVIRONMENT'] ?? 'production');
 
                 require __DIR__ . '/app/Config/Paths.php';
                 $paths = new \Config\Paths();
