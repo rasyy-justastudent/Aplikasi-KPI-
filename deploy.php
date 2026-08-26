@@ -169,13 +169,13 @@ try {
                 // Re-seed Active Period
                 $db->table('periodes')->emptyTable();
                 $db->table('periodes')->insert([
-                    'id'           => 1,
-                    'periode'      => '2026/2027',
-                    'semester'     => 'Tahunan (1 Tahun Full)',
-                    'tahun_ajaran' => '2026/2027',
-                    'is_active'    => 1,
-                    'created_at'   => date('Y-m-d H:i:s'),
-                    'updated_at'   => date('Y-m-d H:i:s'),
+                    'tahun_pelajaran' => 'TP 2026-2027',
+                    'semester'        => 'Tahunan (1 Tahun Full)',
+                    'status'          => 'open',
+                    'tgl_mulai'       => '2026-07-01',
+                    'tgl_selesai'     => '2027-06-30',
+                    'created_at'      => date('Y-m-d H:i:s'),
+                    'updated_at'      => date('Y-m-d H:i:s'),
                 ]);
 
                 $db->query('SET FOREIGN_KEY_CHECKS = 1;');
