@@ -9,6 +9,7 @@ class KpiSeeder extends Seeder
     public function run()
     {
         $db = \Config\Database::connect();
+        $db->query('SET FOREIGN_KEY_CHECKS = 0;');
 
         // 1. Seed Kategori KPIs
         $db->table('kategori_kpis')->emptyTable();
@@ -326,5 +327,6 @@ class KpiSeeder extends Seeder
                 }
             }
         }
+        $db->query('SET FOREIGN_KEY_CHECKS = 1;');
     }
 }
