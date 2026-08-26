@@ -105,8 +105,8 @@ try {
             @rmdir($extractDir);
         }
 
-        // 3. Auto Run Migrations for Database Updates
-        $logs[] = "🗄️ Memeriksa & meng-update struktur tabel database...";
+        // 3. Auto Run Migrations & Seeder for Database Updates
+        $logs[] = "🗄️ Memeriksa & meng-update struktur database & data 4 Pilar KPI...";
         try {
             if (file_exists(__DIR__ . '/vendor/autoload.php')) {
                 require_once __DIR__ . '/vendor/autoload.php';
@@ -117,11 +117,16 @@ try {
                 if ($migrated) {
                     $logs[] = "✨ Migrasi Database Sukses: Tabel baru / kolom baru otomatis ter-update!";
                 } else {
-                    $logs[] = "ℹ️ Database sudah versi terbaru (tidak ada perubahan tabel).";
+                    $logs[] = "ℹ️ Database sudah versi terbaru.";
                 }
+
+                // Run KpiSeeder to update categories and period in database
+                $seeder = \Config\Database::seeder();
+                $seeder->call('App\Database\Seeds\KpiSeeder');
+                $logs[] = "🌱 Seeder Sukses: Data 4 Pilar (PEDAGOGIK 25%) & Periode Tahunan otomatis ter-update di database hosting!";
             }
         } catch (\Throwable $migError) {
-            $logs[] = "⚠️ Info Migrasi DB: " . $migError->getMessage();
+            $logs[] = "⚠️ Info Migrasi/Seeder DB: " . $migError->getMessage();
         }
 
         $elapsed = round(microtime(true) - $startTime, 2);
