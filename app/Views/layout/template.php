@@ -47,7 +47,7 @@
                     <i class="bi bi-calendar3"></i> Periode KPI
                 </a>
                 <a href="<?= base_url('/indikator') ?>" class="nav-link <?= strpos(uri_string(), 'indikator') === 0 ? 'active' : '' ?>">
-                    <i class="bi bi-list-check"></i> 5 Pilar Indikator
+                    <i class="bi bi-list-check"></i> 4 Pilar Indikator
                 </a>
             <?php endif; ?>
 
@@ -63,7 +63,7 @@
 
             <?php if (session()->get('guru_id')): ?>
                 <a href="<?= base_url('/evaluasi-metode') ?>" class="nav-link <?= strpos(uri_string(), 'evaluasi-metode') === 0 ? 'active' : '' ?>">
-                    <i class="bi bi-journal-check"></i> Evaluasi Metode (Pilar 5)
+                    <i class="bi bi-journal-check"></i> Evaluasi Metode Pembelajaran
                 </a>
                 <a href="<?= base_url('/presensi') ?>" class="nav-link <?= strpos(uri_string(), 'presensi') === 0 ? 'active' : '' ?>">
                     <i class="bi bi-calendar-check-fill"></i> Presensi & Log KBM

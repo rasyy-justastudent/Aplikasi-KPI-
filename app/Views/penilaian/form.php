@@ -8,10 +8,17 @@
         <div class="hero-banner-card" style="background: #eef7f3; color: var(--noor-text-main); border: 1px solid var(--noor-mint-border); box-shadow: none;">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                 <div>
-                    <h1 class="hero-title" style="color: var(--noor-emerald-dark);">Penilaian Mandiri / Rekan Sejawat 360°</h1>
-                    <p class="hero-subtitle mb-0 text-muted">
-                        Berikan penilaian objektif bagi pendidik: <strong><?= esc($guruTarget['nama_guru']) ?></strong> pada 3 sub-aspek kompetensi sosial dan kontribusi sekolah di bawah ini.
-                    </p>
+                    <?php if (in_array(session()->get('role'), ['guru', 'admin', 'admin_tu'])): ?>
+                        <h1 class="hero-title" style="color: var(--noor-emerald-dark);">Penilaian Rekan Sejawat 360°</h1>
+                        <p class="hero-subtitle mb-0 text-muted">
+                            Berikan penilaian objektif bagi pendidik: <strong><?= esc($guruTarget['nama_guru']) ?></strong> pada 15 butir indikator KPI Kompetensi Sosial & Penilaian Rekan Sejawat 360° di bawah ini.
+                        </p>
+                    <?php else: ?>
+                        <h1 class="hero-title" style="color: var(--noor-emerald-dark);">Penilaian KPI Pendidik 360° (Kepala Sekolah / Management)</h1>
+                        <p class="hero-subtitle mb-0 text-muted">
+                            Berikan penilaian objektif bagi pendidik: <strong><?= esc($guruTarget['nama_guru']) ?></strong> pada instrumen Kompetensi Profesional, Kepribadian, dan Sosial 360° di bawah ini.
+                        </p>
+                    <?php endif; ?>
                 </div>
                 <div>
                     <a href="<?= base_url('/penilaian') ?>" class="btn-noor-secondary">
@@ -34,18 +41,20 @@
         <div class="col-lg-3">
             <div class="step-wizard-card sticky-top" style="top: 100px;">
                 <h6 class="fw-bold mb-3" style="color: var(--noor-text-main);">Progres Pengisian</h6>
-                <div class="step-wizard-item active">
-                    <div class="step-badge-num">1</div>
-                    <div>
-                        <div class="step-label-num">Langkah 1</div>
-                        <div class="step-title">15 Indikator Rekan Sejawat 360°</div>
+                <?php foreach ($kategoris as $kStepIdx => $kStep): ?>
+                    <div class="step-wizard-item active mb-2">
+                        <div class="step-badge-num"><?= $kStepIdx + 1 ?></div>
+                        <div>
+                            <div class="step-label-num">Bagian <?= $kStepIdx + 1 ?></div>
+                            <div class="step-title"><?= esc($kStep['nama_kategori']) ?></div>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
 
                 <div class="mt-4 pt-3 border-top">
                     <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.8rem;">
-                        <span class="text-muted">Penyelesaian</span>
-                        <span class="fw-bold text-success">100%</span>
+                        <span class="text-muted">Status Form</span>
+                        <span class="fw-bold text-success">Siap Diisi</span>
                     </div>
                     <div class="progress-noor-track">
                         <div class="progress-noor-bar bg-noor-emerald" style="width: 100%;"></div>

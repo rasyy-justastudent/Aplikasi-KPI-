@@ -11,7 +11,7 @@
                         <div>
                             <h1 class="hero-title" style="color: var(--noor-emerald-dark);">Form Evaluasi Variasi Metode Penilaian Pembelajaran</h1>
                             <p class="hero-subtitle mb-0 text-muted">
-                                Pengisian instrumen metode penilaian Pilar 5 untuk Periode: <strong>TP <?= esc($activePeriode['tahun_pelajaran']) ?> — Semester <?= esc($activePeriode['semester']) ?></strong>
+                                Pengisian instrumen metode penilaian (Integrasi Pilar 1 Pedagogik) untuk Periode: <strong>TP <?= esc($activePeriode['tahun_pelajaran']) ?> — <?= esc($activePeriode['semester']) ?></strong>
                             </p>
                         </div>
                         <div>
@@ -34,10 +34,10 @@
             <div class="card-noor mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="num-step-box">5</span>
-                        <h5 class="fw-bold text-dark mb-0">Form Evaluasi Variasi Metode Penilaian Pembelajaran (Pilar 5)</h5>
+                        <span class="num-step-box">1</span>
+                        <h5 class="fw-bold text-dark mb-0">Form Evaluasi Variasi Metode Penilaian Pembelajaran (Pilar 1: Pedagogik)</h5>
                     </div>
-                    <span class="badge-mint-pill">Pilar 5 Evaluasi</span>
+                    <span class="badge-mint-pill">Pilar 1 Pedagogik</span>
                 </div>
 
                 <div class="d-flex flex-column gap-4">

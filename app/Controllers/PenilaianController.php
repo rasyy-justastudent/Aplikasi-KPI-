@@ -111,8 +111,15 @@ class PenilaianController extends BaseController
             }
         }
 
-        // Fetch categories and indicators (Strictly show Pilar 4: SOSIAL_360 15 indicators)
-        $kategoris = $this->kategoriModel->where('kode_kategori', 'SOSIAL_360')->findAll();
+        // Role Scoping for Evaluation Categories:
+        // Guru and Admin: SOSIAL_360 (Rekan Sejawat 360°)
+        // Kepsek & Leadership: PROFESIONAL, KEPRIBADIAN, and SOSIAL_360
+        if (in_array($role, ['guru', 'admin', 'admin_tu'])) {
+            $kategoris = $this->kategoriModel->where('kode_kategori', 'SOSIAL_360')->findAll();
+        } else {
+            $kategoris = $this->kategoriModel->whereIn('kode_kategori', ['PROFESIONAL', 'KEPRIBADIAN', 'SOSIAL_360'])->findAll();
+        }
+
         $indikatorsPerKategori = [];
         foreach ($kategoris as $kat) {
             $indikatorsPerKategori[$kat['id']] = $this->indikatorModel->getByKategori($kat['id']);
@@ -151,7 +158,17 @@ class PenilaianController extends BaseController
             return redirect()->to('/penilaian')->with('error', 'Anda tidak dapat menilai diri sendiri.');
         }
 
-        $scores = $this->request->getPost('scores'); // array of indikator_id => 1-5 score
+        $scores = $this->request->getPost('scores') ?? []; // array of indikator_id => 1-5 score
+
+        // Fetch existing assessment for this target guru in active period as fallback score
+        $existingHeader = $this->penilaianModel->where('guru_id', $guruId)
+            ->where('periode_id', $periodeId)
+            ->first();
+
+        $fallbackP1 = $existingHeader ? ($existingHeader['skor_pilar_1'] / 100.0 * 5.0) : 4.0;
+        $fallbackP2 = $existingHeader ? ($existingHeader['skor_pilar_2'] / 100.0 * 5.0) : 4.0;
+        $fallbackP3 = $existingHeader ? ($existingHeader['skor_pilar_3'] / 100.0 * 5.0) : 4.0;
+        $fallbackP4 = $existingHeader ? ($existingHeader['skor_pilar_4'] / 100.0 * 5.0) : 4.0;
 
         // Fetch all categories
         $kategoris = $this->kategoriModel->findAll();
@@ -161,9 +178,9 @@ class PenilaianController extends BaseController
         }
 
         // Helper to compute avg score for a category
-        $calcKatAvg = function ($kodeKat) use ($scores, $katMap) {
+        $calcKatAvg = function ($kodeKat, $fallbackVal = 4.0) use ($scores, $katMap) {
             $katId = $katMap[$kodeKat] ?? 0;
-            if (!$katId) return 4.0;
+            if (!$katId) return $fallbackVal;
 
             $indikators = $this->indikatorModel->getByKategori($katId);
             $total = 0;
@@ -175,22 +192,21 @@ class PenilaianController extends BaseController
                 }
             }
 
-            return $cnt > 0 ? ($total / $cnt) : 4.0;
+            return $cnt > 0 ? ($total / $cnt) : $fallbackVal;
         };
 
-        $skorP1 = $calcKatAvg('OBS_KELAS');
-        $skorP2 = $calcKatAvg('PROFESIONAL');
-        $skorP3 = $calcKatAvg('KEPRIBADIAN');
-        $skorP4 = $calcKatAvg('SOSIAL_360');
+        $pedagogikKatId = $katMap['PEDAGOGIK'] ?? $katMap['OBS_KELAS'] ?? 0;
+        $skorP1 = $calcKatAvg('PEDAGOGIK', $fallbackP1);
+        if (!$skorP1 || $skorP1 == 4.0 && !isset($scores[$pedagogikKatId])) {
+            $skorP1 = $calcKatAvg('OBS_KELAS', $fallbackP1);
+        }
 
-        // Pilar 5: Presensi & Evaluasi Metode
-        $rekapPresensi = $this->presensiModel->getRekapPresensi($guruId);
-        $skorPresensi = $this->calculator->hitungSkorPresensi($rekapPresensi['total_hadir'], $rekapPresensi['total_hari']);
-        $skorEvalMetode = $calcKatAvg('EVAL_METODE');
-        $skorP5 = round(($skorEvalMetode + $skorPresensi['skor_skala_5']) / 2.0, 2);
+        $skorP2 = $calcKatAvg('PROFESIONAL', $fallbackP2);
+        $skorP3 = $calcKatAvg('KEPRIBADIAN', $fallbackP3);
+        $skorP4 = $calcKatAvg('SOSIAL_360', $fallbackP4);
 
-        // Run full KPI calculation service
-        $result = $this->calculator->hitungNilaiAkhir($skorP1, $skorP2, $skorP3, $skorP4, $skorP5);
+        // Run full KPI calculation service (4 Pillars x 25%)
+        $result = $this->calculator->hitungNilaiAkhir($skorP1, $skorP2, $skorP3, $skorP4);
 
         // Upsert Penilaian KPI Header
         $existing = $this->penilaianModel->where('guru_id', $guruId)

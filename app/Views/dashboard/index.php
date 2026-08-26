@@ -367,7 +367,7 @@
         <div class="col-lg-7">
             <div class="card-noor h-100">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0" style="color: var(--noor-text-main);"><i class="bi bi-radar text-success me-2"></i>Capaian 5 Pilar KPI Sekolah</h5>
+                    <h5 class="fw-bold mb-0" style="color: var(--noor-text-main);"><i class="bi bi-radar text-success me-2"></i>Capaian 4 Pilar KPI Sekolah</h5>
                     <span class="badge-mint-pill">Skala 0-100%</span>
                 </div>
                 <div style="height: 310px;" class="position-relative">
@@ -458,11 +458,10 @@
         type: 'radar',
         data: {
             labels: [
-                'Perencanaan (Pilar 1)',
+                'Pedagogik (Pilar 1)',
                 'Profesional (Pilar 2)',
                 'Kepribadian (Pilar 3)',
-                'Sosial 360° (Pilar 4)',
-                'Variasi Metode (Pilar 5)'
+                'Sosial 360° (Pilar 4)'
             ],
             datasets: [{
                 label: 'Skor Saya (%)',
@@ -470,8 +469,7 @@
                     <?= $myPenilaian ? $myPenilaian['skor_pilar_1'] : 92 ?>,
                     <?= $myPenilaian ? $myPenilaian['skor_pilar_2'] : 88 ?>,
                     <?= $myPenilaian ? $myPenilaian['skor_pilar_3'] : 90 ?>,
-                    <?= $myPenilaian ? $myPenilaian['skor_pilar_4'] : 85 ?>,
-                    <?= $myPenilaian ? $myPenilaian['skor_pilar_5'] : 94 ?>
+                    <?= $myPenilaian ? $myPenilaian['skor_pilar_4'] : 85 ?>
                 ],
                 fill: true,
                 backgroundColor: 'rgba(13, 92, 70, 0.2)',
@@ -509,20 +507,18 @@
         type: 'radar',
         data: {
             labels: [
-                'Perencanaan (Pilar 1)',
+                'Pedagogik (Pilar 1)',
                 'Profesional (Pilar 2)',
                 'Kepribadian (Pilar 3)',
-                'Sosial 360° (Pilar 4)',
-                'Variasi Metode (Pilar 5)'
+                'Sosial 360° (Pilar 4)'
             ],
             datasets: [{
                 label: 'Rata-Rata Sekolah (%)',
                 data: [
-                    <?= $avgScores['pilar_1'] ?: 78.5 ?>,
-                    <?= $avgScores['pilar_2'] ?: 82.0 ?>,
-                    <?= $avgScores['pilar_3'] ?: 85.5 ?>,
-                    <?= $avgScores['pilar_4'] ?: 80.0 ?>,
-                    <?= $avgScores['pilar_5'] ?: 88.0 ?>
+                    <?= $avgScores['pilar_1'] ?: 88 ?>,
+                    <?= $avgScores['pilar_2'] ?: 85 ?>,
+                    <?= $avgScores['pilar_3'] ?: 87 ?>,
+                    <?= $avgScores['pilar_4'] ?: 84 ?>
                 ],
                 fill: true,
                 backgroundColor: 'rgba(13, 92, 70, 0.2)',

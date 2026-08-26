@@ -274,11 +274,11 @@
             </div>
         </div>
 
-        <!-- 3. Rincian Nilai 5 Pilar Evaluasi Terbobot Table Card -->
+        <!-- 3. Rincian Nilai 4 Pilar Evaluasi Terbobot Table Card -->
         <div class="p-4 rounded-4 bg-white border mb-4" style="border-color: #e2e8f0 !important;">
             <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
                 <i class="bi bi-table fs-5 text-dark"></i>
-                <span class="fw-bold text-dark" style="font-size: 0.9rem;">Rincian Nilai 5 Pilar Evaluasi Terbobot</span>
+                <span class="fw-bold text-dark" style="font-size: 0.9rem;">Rincian Nilai 4 Pilar Evaluasi Terbobot (25% per Pilar)</span>
             </div>
 
             <table class="table table-borderless align-middle custom-report-table mb-0">
@@ -293,11 +293,10 @@
                 <tbody>
                     <?php 
                     $pilars = [
-                        ['num' => '1', 'name' => 'Observasi Kelas & Supervisi', 'bobot' => 25, 'skor' => $penilaian['skor_pilar_1'] ?? 70.0],
+                        ['num' => '1', 'name' => 'Kompetensi Pedagogik (Observasi & Metode)', 'bobot' => 25, 'skor' => $penilaian['skor_pilar_1'] ?? 70.0],
                         ['num' => '2', 'name' => 'Kompetensi Profesional', 'bobot' => 25, 'skor' => $penilaian['skor_pilar_2'] ?? 76.0],
-                        ['num' => '3', 'name' => 'Kepribadian & Kedisiplinan', 'bobot' => 20, 'skor' => $penilaian['skor_pilar_3'] ?? 80.0],
-                        ['num' => '4', 'name' => 'Kompetensi Sosial (360°)', 'bobot' => 15, 'skor' => $penilaian['skor_pilar_4'] ?? 74.0],
-                        ['num' => '5', 'name' => 'Variasi Metode & Presensi', 'bobot' => 15, 'skor' => $penilaian['skor_pilar_5'] ?? 72.0],
+                        ['num' => '3', 'name' => 'Kepribadian & Kedisiplinan', 'bobot' => 25, 'skor' => $penilaian['skor_pilar_3'] ?? 80.0],
+                        ['num' => '4', 'name' => 'Kompetensi Sosial (360°)', 'bobot' => 25, 'skor' => $penilaian['skor_pilar_4'] ?? 74.0],
                     ];
                     foreach ($pilars as $p):
                         $terbobot = number_format(($p['skor'] * ($p['bobot'] / 100)), 2);

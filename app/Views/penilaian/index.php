@@ -10,7 +10,7 @@
                 <div>
                     <h1 class="hero-title">Evaluasi KPI 360° & Penetapan Level Pendidik</h1>
                     <p class="hero-subtitle mb-0">
-                        Matriks penilaian 5 pilar indikator kualitatif dan kuantitatif untuk penentuan predikat level karir pendidik MI Al-Husna.
+                        Matriks penilaian 4 pilar indikator kualitatif dan kuantitatif (masing-masing 25.00%) untuk penentuan predikat level karir pendidik MI Al-Husna.
                     </p>
                 </div>
                 <div>
@@ -32,11 +32,10 @@
                     <th class="text-center" style="width: 50px;">No</th>
                     <th>Nama Pendidik</th>
                     <th class="text-center">Posisi</th>
-                    <th class="text-center">Pilar 1 (25%)</th>
-                    <th class="text-center">Pilar 2 (25%)</th>
-                    <th class="text-center">Pilar 3 (20%)</th>
-                    <th class="text-center">Pilar 4 (15%)</th>
-                    <th class="text-center">Pilar 5 (15%)</th>
+                    <th class="text-center">Pilar 1: Pedagogik (25%)</th>
+                    <th class="text-center">Pilar 2: Profesional (25%)</th>
+                    <th class="text-center">Pilar 3: Kepribadian (25%)</th>
+                    <th class="text-center">Pilar 4: Sosial 360° (25%)</th>
                     <th class="text-center">Nilai Akhir</th>
                     <th class="text-center">Level Karir</th>
                     <th class="text-center">Status Approval</th>
@@ -73,7 +72,6 @@
                             <td class="text-center"><span class="fw-bold text-success"><?= number_format((float)$pRecord['skor_pilar_2'], 2) ?>%</span></td>
                             <td class="text-center"><span class="fw-bold text-success"><?= number_format((float)$pRecord['skor_pilar_3'], 2) ?>%</span></td>
                             <td class="text-center"><span class="fw-bold text-success"><?= number_format((float)$pRecord['skor_pilar_4'], 2) ?>%</span></td>
-                            <td class="text-center"><span class="fw-bold text-success"><?= number_format((float)$pRecord['skor_pilar_5'], 2) ?>%</span></td>
                             <td class="text-center">
                                 <span class="fw-extrabold text-success fs-6"><?= number_format((float)$pRecord['nilai_akhir_total'], 2) ?></span>
                             </td>
@@ -94,7 +92,7 @@
                                 <?php endif; ?>
                             </td>
                         <?php else: ?>
-                            <td colspan="6" class="text-muted text-center"><small><em>Belum dinilai</em></small></td>
+                            <td colspan="5" class="text-muted text-center"><small><em>Belum dinilai</em></small></td>
                             <td class="text-center">
                                 <?php if (in_array($g['role'] ?? '', ['admin', 'admin_tu']) || ($g['posisi'] ?? '') === 'Admin TU'): ?>
                                     <span class="badge bg-secondary-subtle text-secondary border">-</span>

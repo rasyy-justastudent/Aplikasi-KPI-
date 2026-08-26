@@ -5,31 +5,30 @@ namespace App\Services;
 class KpiCalculatorService
 {
     /**
-     * Menghitung Nilai Akhir KPI dan Mengklasifikasikan Tingkatan Level Guru
+     * Menghitung Nilai Akhir KPI (4 Pilar x 25%) dan Mengklasifikasikan Tingkatan Level Guru
      * 
-     * @param float $skorObsKelas    (Skala 1-5, Bobot 25%)
+     * @param float $skorPedagogik  (Skala 1-5, Bobot 25%) - Observasi & Evaluasi Metode
      * @param float $skorProfesional (Skala 1-5, Bobot 25%)
-     * @param float $skorKepribadian (Skala 1-5, Bobot 20%)
-     * @param float $skorSosial360   (Skala 1-5, Bobot 15%)
-     * @param float $skorEvalMetode  (Skala 1-5, Bobot 15%)
+     * @param float $skorKepribadian (Skala 1-5, Bobot 25%)
+     * @param float $skorSosial360   (Skala 1-5, Bobot 25%)
+     * @param float $skorEvalMetode  (Optional legacy parameter, defaults to $skorPedagogik)
      * @return array
      */
     public function hitungNilaiAkhir(
-        float $skorObsKelas,
+        float $skorPedagogik,
         float $skorProfesional,
         float $skorKepribadian,
         float $skorSosial360,
-        float $skorEvalMetode
+        float $skorEvalMetode = 0.0
     ): array {
         // Konversi skala 1-5 ke skala 0-100 (Nilai / 5 * 100)
-        $p1 = ($skorObsKelas / 5.0) * 100.0;
+        $p1 = ($skorPedagogik / 5.0) * 100.0;
         $p2 = ($skorProfesional / 5.0) * 100.0;
         $p3 = ($skorKepribadian / 5.0) * 100.0;
         $p4 = ($skorSosial360 / 5.0) * 100.0;
-        $p5 = ($skorEvalMetode / 5.0) * 100.0;
 
-        // Hitung total terbobot
-        $totalSkor = ($p1 * 0.25) + ($p2 * 0.25) + ($p3 * 0.20) + ($p4 * 0.15) + ($p5 * 0.15);
+        // Hitung total terbobot (4 pilar x 25.00%)
+        $totalSkor = ($p1 * 0.25) + ($p2 * 0.25) + ($p3 * 0.25) + ($p4 * 0.25);
         $totalSkor = round($totalSkor, 2);
 
         // Tentukan Tingkatan Level MI Al-Husna
@@ -56,7 +55,7 @@ class KpiCalculatorService
             'skor_pilar_2'     => round($p2, 2),
             'skor_pilar_3'     => round($p3, 2),
             'skor_pilar_4'     => round($p4, 2),
-            'skor_pilar_5'     => round($p5, 2),
+            'skor_pilar_5'     => round($p1, 2),
             'nilai_akhir'      => $totalSkor,
             'level_code'       => $levelCode,
             'level_name'       => $levelName,

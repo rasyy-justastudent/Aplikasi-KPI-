@@ -11,12 +11,13 @@ class KpiSeeder extends Seeder
         $db = \Config\Database::connect();
 
         // 1. Seed Kategori KPIs
+        $db->table('kategori_kpis')->emptyTable();
         $kategoriData = [
             [
-                'kode_kategori' => 'OBS_KELAS',
-                'nama_kategori' => 'Observasi Kelas & Supervisi Pembelajaran',
+                'kode_kategori' => 'PEDAGOGIK',
+                'nama_kategori' => 'Kompetensi Pedagogik (Observasi Kelas & Evaluasi Metode)',
                 'bobot_persen' => 25.00,
-                'deskripsi'    => 'Penilaian supervisi KBM langsung oleh Observer/Koordinator Bidang (20 Indikator A-G).'
+                'deskripsi'    => 'Penilaian supervisi KBM kelas, variasi metode penilaian (Formatif, Sumatif, Otentik), serta presensi kerja.'
             ],
             [
                 'kode_kategori' => 'PROFESIONAL',
@@ -27,35 +28,28 @@ class KpiSeeder extends Seeder
             [
                 'kode_kategori' => 'KEPRIBADIAN',
                 'nama_kategori' => 'Kompetensi Kepribadian, Kedisiplinan & Kematangan Emosi',
-                'bobot_persen' => 20.00,
+                'bobot_persen' => 25.00,
                 'deskripsi'    => 'Etika & keteladanan, kedisiplinan KBM, partisipasi rapat dinas, serta kematangan emosi.'
             ],
             [
                 'kode_kategori' => 'SOSIAL_360',
                 'nama_kategori' => 'KPI Kompetensi Sosial & Penilaian Rekan Sejawat 360°',
-                'bobot_persen' => 15.00,
+                'bobot_persen' => 25.00,
                 'deskripsi'    => 'Hubungan antar personal dengan sejawat, komunikasi orang tua, dan kontribusi non-pengajaran.'
             ],
-            [
-                'kode_kategori' => 'EVAL_METODE',
-                'nama_kategori' => 'Variasi Metode Penilaian & Presensi Kerja',
-                'bobot_persen' => 15.00,
-                'deskripsi'    => 'Proporsi metode evaluasi (Formatif, Sumatif, Otentik) dan persentase presensi harian KBM.'
-            ],
         ];
-        $db->table('kategori_kpis')->ignore(true)->insertBatch($kategoriData);
+        $db->table('kategori_kpis')->insertBatch($kategoriData);
 
         // Fetch category IDs
-        $obsId = $db->table('kategori_kpis')->where('kode_kategori', 'OBS_KELAS')->get()->getRow()->id;
+        $pedagogikId = $db->table('kategori_kpis')->where('kode_kategori', 'PEDAGOGIK')->get()->getRow()->id;
         $profId = $db->table('kategori_kpis')->where('kode_kategori', 'PROFESIONAL')->get()->getRow()->id;
         $kepId = $db->table('kategori_kpis')->where('kode_kategori', 'KEPRIBADIAN')->get()->getRow()->id;
         $sosId = $db->table('kategori_kpis')->where('kode_kategori', 'SOSIAL_360')->get()->getRow()->id;
-        $evalId = $db->table('kategori_kpis')->where('kode_kategori', 'EVAL_METODE')->get()->getRow()->id;
 
         // 2. Seed Indikator KPIs
         $indikatorData = [];
 
-        // Pilar 1: Observasi Kelas (20 Indikator)
+        // Pilar 1: Kompetensi Pedagogik (Observasi Kelas & Evaluasi Metode)
         $obsItems = [
             ['A. Perencanaan Pembelajaran', 'Kesesuaian modul ajar dengan standar kurikulum MI Al-Husna', 'scale_1_5', 'Kurikulum terstandar'],
             ['A. Perencanaan Pembelajaran', 'Ketersediaan dan kejelasan bahan ajar yang menarik', 'scale_1_5', 'Bahan ajar interaktif'],
@@ -82,8 +76,27 @@ class KpiSeeder extends Seeder
         $urutan = 1;
         foreach ($obsItems as $item) {
             $indikatorData[] = [
-                'kategori_id' => $obsId,
-                'kode_indikator' => 'OBS_' . sprintf('%02d', $urutan),
+                'kategori_id' => $pedagogikId,
+                'kode_indikator' => 'PED_' . sprintf('%02d', $urutan),
+                'sub_aspek' => $item[0],
+                'pertanyaan_indikator' => $item[1],
+                'tipe_jawaban' => $item[2],
+                'target_standar' => $item[3],
+                'urutan' => $urutan++,
+            ];
+        }
+
+        // Metode & Presensi Indicators (Merged into Pilar 1 Pedagogik)
+        $evalItems = [
+            ['H. Evaluasi Metode & Presensi Kerja', 'Proporsi penerapan metode penilaian Formatif, Sumatif, dan Otentik', 'scale_1_5', 'Terintegrasi 3 Metode'],
+            ['H. Evaluasi Metode & Presensi Kerja', 'Status kelengkapan instrumen & rubrik penilaian tertulis di Modul Ajar', 'scale_1_5', 'Rubrik Lengkap'],
+            ['H. Evaluasi Metode & Presensi Kerja', 'Persentase rekapitulasi kehadiran harian KBM dan kegiatan sekolah', 'scale_1_5', 'Target >= 90%'],
+        ];
+
+        foreach ($evalItems as $item) {
+            $indikatorData[] = [
+                'kategori_id' => $pedagogikId,
+                'kode_indikator' => 'PED_' . sprintf('%02d', $urutan),
                 'sub_aspek' => $item[0],
                 'pertanyaan_indikator' => $item[1],
                 'tipe_jawaban' => $item[2],
@@ -206,26 +219,6 @@ class KpiSeeder extends Seeder
             ];
         }
 
-        // Pilar 5: Metode & Presensi (3 Indikator utama)
-        $evalItems = [
-            ['Variasi Metode Penilaian', 'Proporsi penerapan metode penilaian Formatif, Sumatif, dan Otentik', 'scale_1_5', 'Terintegrasi 3 Metode'],
-            ['Kelengkapan Rubrik Modul Ajar', 'Status kelengkapan instrumen & rubrik penilaian tertulis di Modul Ajar', 'scale_1_5', 'Rubrik Lengkap'],
-            ['Presensi Kerja & Kehadiran', 'Persentase rekapitulasi kehadiran harian KBM dan kegiatan sekolah', 'scale_1_5', 'Target >= 90%'],
-        ];
-
-        $urutan = 1;
-        foreach ($evalItems as $item) {
-            $indikatorData[] = [
-                'kategori_id' => $evalId,
-                'kode_indikator' => 'EVAL_' . sprintf('%02d', $urutan),
-                'sub_aspek' => $item[0],
-                'pertanyaan_indikator' => $item[1],
-                'tipe_jawaban' => $item[2],
-                'target_standar' => $item[3],
-                'urutan' => $urutan++,
-            ];
-        }
-
         $db->table('penilaian_details')->emptyTable();
         $db->table('indikator_kpis')->emptyTable();
         $db->table('indikator_kpis')->insertBatch($indikatorData);
@@ -239,23 +232,14 @@ class KpiSeeder extends Seeder
         $db->table('gurus')->emptyTable();
         $db->table('users')->emptyTable();
 
-        // 3. Seed Periodes
+        // 3. Seed Periodes (Setahun Sekali / 1 Tahun Full)
         $periodeData = [
             [
                 'tahun_pelajaran' => '2026-2027',
-                'semester' => 'Ganjil',
+                'semester' => 'Tahunan (1 Tahun Full)',
                 'status' => 'open',
-                'tgl_mulai' => '2026-07-15',
-                'tgl_selesai' => '2026-12-20',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-            [
-                'tahun_pelajaran' => '2026-2027',
-                'semester' => 'Genap',
-                'status' => 'draft',
-                'tgl_mulai' => '2027-01-05',
-                'tgl_selesai' => '2027-06-25',
+                'tgl_mulai' => '2026-07-01',
+                'tgl_selesai' => '2027-06-30',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]

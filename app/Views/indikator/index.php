@@ -2,17 +2,17 @@
 
 <?= $this->section('content') ?>
 <div class="mb-4">
-    <h4 class="fw-bold text-success mb-1"><i class="bi bi-list-check me-2"></i>Matriks 5 Pilar & Indikator Instrument KPI</h4>
-    <p class="text-muted mb-0">Total bobot akumulasi 100% dengan rincian butir indikator penilaian 360°.</p>
+    <h4 class="fw-bold text-success mb-1"><i class="bi bi-list-check me-2"></i>Matriks 4 Pilar & Indikator Instrument KPI</h4>
+    <p class="text-muted mb-0">Total bobot akumulasi 100% (4 Pilar x 25.00%) dengan rincian butir indikator penilaian 360°.</p>
 </div>
 
 <!-- Pilar Tabs -->
 <div class="row g-3 mb-4">
     <?php foreach ($kategoris as $kat): ?>
-        <div class="col-md-2-4 col-sm-6">
+        <div class="col-md-3 col-sm-6">
             <a href="<?= base_url('/indikator?kategori_id=' . $kat['id']) ?>" class="text-decoration-none">
                 <div class="card card-custom p-3 text-center <?= ($selectedKategori && $selectedKategori['id'] == $kat['id']) ? 'border border-2 border-success bg-success-subtle' : '' ?>">
-                    <span class="badge bg-success text-white fw-bold mx-auto mb-2 px-3 py-1"><?= $kat['bobot_persen'] ?>%</span>
+                    <span class="badge bg-success text-white fw-bold mx-auto mb-2 px-3 py-1"><?= number_format((float)$kat['bobot_persen'], 2) ?>%</span>
                     <h6 class="fw-bold text-dark mb-1" style="font-size: 0.85rem;"><?= esc($kat['kode_kategori']) ?></h6>
                     <small class="text-muted d-block text-truncate" style="font-size: 0.75rem;"><?= esc($kat['nama_kategori']) ?></small>
                 </div>

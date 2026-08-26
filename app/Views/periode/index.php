@@ -88,8 +88,9 @@
                         <input type="text" name="tahun_pelajaran" class="form-control" required placeholder="Contoh: 2026-2027">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Semester *</label>
+                        <label class="form-label fw-bold">Siklus Periode / Semester *</label>
                         <select name="semester" class="form-select" required>
+                            <option value="Tahunan (1 Tahun Full)" selected>Tahunan (1 Tahun Full)</option>
                             <option value="Ganjil">Ganjil</option>
                             <option value="Genap">Genap</option>
                         </select>

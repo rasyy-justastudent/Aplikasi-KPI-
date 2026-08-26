@@ -155,15 +155,15 @@ class ObservasiController extends BaseController
             return redirect()->to('/observasi')->with('error', 'Periode penilaian tidak ditemukan.');
         }
 
-        // Fetch Pilar 1: OBS_KELAS category & 20 indicators
-        $kategoriObs = $this->kategoriModel->where('kode_kategori', 'OBS_KELAS')->first();
+        // Fetch Pilar 1: PEDAGOGIK category & indicators
+        $kategoriObs = $this->kategoriModel->where('kode_kategori', 'PEDAGOGIK')->first() ?? $this->kategoriModel->where('kode_kategori', 'OBS_KELAS')->first();
         if (!$kategoriObs) {
-            return redirect()->to('/observasi')->with('error', 'Kategori Observasi Kelas tidak ditemukan.');
+            return redirect()->to('/observasi')->with('error', 'Kategori Kompetensi Pedagogik tidak ditemukan.');
         }
 
         $indikators = $this->indikatorModel->getByKategori($kategoriObs['id']);
 
-        // Group indicators by sub_aspek (A s.d. G)
+        // Group indicators by sub_aspek (A s.d. H)
         $groupedIndikators = [];
         foreach ($indikators as $ind) {
             $sub = $ind['sub_aspek'] ?: 'Umum';
@@ -209,10 +209,10 @@ class ObservasiController extends BaseController
             return redirect()->to('/observasi')->with('error', 'Penugasan tidak valid.');
         }
 
-        $kategoriObs = $this->kategoriModel->where('kode_kategori', 'OBS_KELAS')->first();
+        $kategoriObs = $this->kategoriModel->where('kode_kategori', 'PEDAGOGIK')->first() ?? $this->kategoriModel->where('kode_kategori', 'OBS_KELAS')->first();
         $indikators  = $this->indikatorModel->getByKategori($kategoriObs['id']);
 
-        // Calculate average score 1-5 for Pilar 1 (OBS_KELAS)
+        // Calculate average score 1-5 for Pilar 1 (PEDAGOGIK)
         $sum = 0;
         $count = 0;
         foreach ($indikators as $ind) {
@@ -234,16 +234,14 @@ class ObservasiController extends BaseController
         $skorP2_persen = $existingHeader ? $existingHeader['skor_pilar_2'] : 85.0;
         $skorP3_persen = $existingHeader ? $existingHeader['skor_pilar_3'] : 85.0;
         $skorP4_persen = $existingHeader ? $existingHeader['skor_pilar_4'] : 85.0;
-        $skorP5_persen = $existingHeader ? $existingHeader['skor_pilar_5'] : 85.0;
 
         // Convert percentage scores back to scale 1-5 for calculator
         $p1_15 = $skorObs15;
         $p2_15 = ($skorP2_persen / 100.0) * 5.0;
         $p3_15 = ($skorP3_persen / 100.0) * 5.0;
         $p4_15 = ($skorP4_persen / 100.0) * 5.0;
-        $p5_15 = ($skorP5_persen / 100.0) * 5.0;
 
-        $calc = $this->calculator->hitungNilaiAkhir($p1_15, $p2_15, $p3_15, $p4_15, $p5_15);
+        $calc = $this->calculator->hitungNilaiAkhir($p1_15, $p2_15, $p3_15, $p4_15);
 
         $penilaiUserId = session()->get('user_id');
 
