@@ -128,19 +128,57 @@ try {
                 require __DIR__ . '/app/Config/Paths.php';
                 $paths = new \Config\Paths();
                 require $paths->systemDirectory . '/Boot.php';
-                \CodeIgniter\Boot::bootConsole($paths);
+                \CodeIgniter\Boot::bootWorker($paths);
 
-                $migrations = \Config\Services::migrations();
-                $migrated = $migrations->latest();
-                if ($migrated) {
-                    $logs[] = "✨ Migrasi Database Sukses: Tabel baru / kolom baru otomatis ter-update!";
-                } else {
-                    $logs[] = "ℹ️ Database sudah versi terbaru.";
-                }
+                $db = \Config\Database::connect();
+                $db->query('SET FOREIGN_KEY_CHECKS = 0;');
 
-                // Run KpiSeeder to update categories and period in database
-                $seeder = \Config\Database::seeder();
-                $seeder->call('App\Database\Seeds\KpiSeeder');
+                // Re-seed 4 Categories
+                $db->table('kategori_kpis')->emptyTable();
+                $db->table('kategori_kpis')->insertBatch([
+                    [
+                        'id'            => 1,
+                        'kode_kategori' => 'PEDAGOGIK',
+                        'nama_kategori' => 'Kompetensi Pedagogik (Observasi Kelas & Evaluasi Metode)',
+                        'bobot_persen' => 25.00,
+                        'deskripsi'    => 'Penilaian supervisi KBM kelas, variasi metode penilaian (Formatif, Sumatif, Otentik), serta presensi kerja.'
+                    ],
+                    [
+                        'id'            => 2,
+                        'kode_kategori' => 'PROFESIONAL',
+                        'nama_kategori' => 'KPI Kompetensi Profesional Guru',
+                        'bobot_persen' => 25.00,
+                        'deskripsi'    => 'Penguasaan materi, pengembangan diri, penguasaan Bahasa Inggris, dan integrasi teknologi/AI.'
+                    ],
+                    [
+                        'id'            => 3,
+                        'kode_kategori' => 'KEPRIBADIAN',
+                        'nama_kategori' => 'Kompetensi Kepribadian, Kedisiplinan & Kematangan Emosi',
+                        'bobot_persen' => 25.00,
+                        'deskripsi'    => 'Etika & keteladanan, kedisiplinan KBM, partisipasi rapat dinas, serta kematangan emosi.'
+                    ],
+                    [
+                        'id'            => 4,
+                        'kode_kategori' => 'SOSIAL_360',
+                        'nama_kategori' => 'KPI Kompetensi Sosial & Penilaian Rekan Sejawat 360°',
+                        'bobot_persen' => 25.00,
+                        'deskripsi'    => 'Hubungan antar personal dengan sejawat, komunikasi orang tua, dan kontribusi non-pengajaran.'
+                    ],
+                ]);
+
+                // Re-seed Active Period
+                $db->table('periodes')->emptyTable();
+                $db->table('periodes')->insert([
+                    'id'           => 1,
+                    'periode'      => '2026/2027',
+                    'semester'     => 'Tahunan (1 Tahun Full)',
+                    'tahun_ajaran' => '2026/2027',
+                    'is_active'    => 1,
+                    'created_at'   => date('Y-m-d H:i:s'),
+                    'updated_at'   => date('Y-m-d H:i:s'),
+                ]);
+
+                $db->query('SET FOREIGN_KEY_CHECKS = 1;');
                 $logs[] = "🌱 Seeder Sukses: Data 4 Pilar (PEDAGOGIK 25%) & Periode Tahunan otomatis ter-update di database hosting!";
             }
         } catch (\Throwable $migError) {
