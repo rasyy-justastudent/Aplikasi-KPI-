@@ -306,7 +306,9 @@
     <div class="login-wrapper">
         <!-- 1. LEFT PANEL: Login Form Side (Form di Sisi Kiri, Menyatu Langsung dengan Latar Putih) -->
         <div class="login-form-side">
-            <div style="height: 10px;"></div>
+            <div class="mb-4">
+                <img src="<?= base_url('/img/logo.png') ?>" alt="Logo MI Al-Husna" style="height: 60px; width: auto; object-fit: contain;">
+            </div>
 
             <div class="form-container-box">
                 <h3 class="form-portal-title">Masuk ke Portal</h3>
@@ -368,8 +370,8 @@
 
         <!-- 2. RIGHT PANEL: Graphic Hero Side (Gambar & Pesan di Sisi Kanan) -->
         <div class="login-hero-side">
-            <div class="hero-logo-box">
-                <i class="fa-solid fa-graduation-cap"></i>
+            <div class="hero-logo-box p-1">
+                <img src="<?= base_url('/img/logo.png') ?>" alt="Logo MI Al-Husna" style="max-height: 100%; max-width: 100%; object-fit: contain;">
             </div>
 
             <div class="hero-main-content">

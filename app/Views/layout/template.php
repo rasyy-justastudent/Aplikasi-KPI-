@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title ?? 'Sistem KPI Guru MI Al-Husna') ?></title>
+    <link rel="icon" type="image/png" href="<?= base_url('/img/logo.png') ?>">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,12 +24,12 @@
     <!-- Sidebar -->
     <nav id="sidebar">
         <div class="brand">
-            <div class="brand-icon">
-                <i class="fa-solid fa-graduation-cap"></i>
+            <div class="brand-icon bg-white p-1 rounded-3 shadow-sm d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                <img src="<?= base_url('/img/logo.png') ?>" alt="Logo MI Al-Husna" style="max-height: 100%; max-width: 100%; object-fit: contain;">
             </div>
             <div>
                 <div class="brand-text">MI Al-Husna</div>
-                <div class="brand-sub">Sistem KPI & Level Karir</div>
+                <div class="brand-sub">Ciledug - Tangerang</div>
             </div>
         </div>
 
