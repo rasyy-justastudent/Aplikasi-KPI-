@@ -27,9 +27,9 @@ class Database extends Config
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => 'u128823797_projek',
-        'password'     => '#Rahasia404#123',
-        'database'     => 'u128823797_projek',
+        'username'     => 'root',
+        'password'     => '',
+        'database'     => 'db_kpi_guru',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
@@ -201,15 +201,15 @@ class Database extends Config
             $this->defaultGroup = 'tests';
         }
 
-        // Guarantee database connection credentials on live hosting server
-        $isLiveHosting = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') === false && strpos($_SERVER['HTTP_HOST'], '127.0.0.1') === false;
-        if ($isLiveHosting || empty($this->default['password']) || $this->default['database'] === 'db_kpi_guru') {
-            if ($isLiveHosting || !empty($_SERVER['HTTP_HOST'])) {
-                $this->default['hostname'] = 'localhost';
-                $this->default['username'] = 'u128823797_projek';
-                $this->default['password'] = '#Rahasia404#123';
-                $this->default['database'] = 'u128823797_projek';
-            }
+        // Automatically apply live hosting database credentials ONLY when running on live domain
+        $httpHost = $_SERVER['HTTP_HOST'] ?? '';
+        $isLiveHosting = !empty($httpHost) && strpos($httpHost, 'localhost') === false && strpos($httpHost, '127.0.0.1') === false;
+        
+        if ($isLiveHosting) {
+            $this->default['hostname'] = 'localhost';
+            $this->default['username'] = 'u128823797_projek';
+            $this->default['password'] = '#Rahasia404#123';
+            $this->default['database'] = 'u128823797_projek';
         }
     }
 }
