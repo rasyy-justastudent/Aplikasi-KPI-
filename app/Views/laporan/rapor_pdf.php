@@ -175,11 +175,11 @@
 
         <!-- 1. Header Card Banner -->
         <div class="header-box mb-4">
-            <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
-                <img src="<?= base_url('/img/logo.png') ?>" alt="Logo MI Al-Husna" style="height: 52px; width: auto; object-fit: contain;">
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                <div class="header-logo-icon"><i class="bi bi-bank"></i></div>
                 <div class="text-start">
-                    <div class="fw-bold text-uppercase" style="font-size: 1rem; letter-spacing: 0.05em; color: #1e293b;">MADRASAH IBTIDAIYAH AL-HUSNA</div>
-                    <div class="text-muted" style="font-size: 0.8rem;">Ciledug - Tangerang | Rapor Evaluasi Kinerja (KPI) Guru</div>
+                    <div class="fw-bold text-uppercase" style="font-size: 0.88rem; letter-spacing: 0.05em; color: #1e293b;">MADRASAH IBTIDAIYAH AL-HUSNA</div>
+                    <div class="text-muted" style="font-size: 0.78rem;">Rapor Evaluasi Kinerja (KPI) Guru</div>
                 </div>
             </div>
 
